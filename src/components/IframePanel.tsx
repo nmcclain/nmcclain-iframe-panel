@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PanelProps } from '@grafana/data';
 import { IframeOptions } from 'types';
 import { css, cx } from '@emotion/css';
@@ -24,6 +24,26 @@ const getStyles = () => {
 
 export const IframePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
   const styles = useStyles2(getStyles);
+  const [isResizing, setIsResizing] = useState(false);
+  const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => { // avoids iframe interfering with resizing
+    setIsResizing(true);
+
+    if (resizeTimeoutRef.current) {
+      clearTimeout(resizeTimeoutRef.current);
+    }
+
+    resizeTimeoutRef.current = setTimeout(() => {
+      setIsResizing(false);
+    }, 100);
+
+    return () => {
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+    };
+  }, [width, height]);
 
   return (
     <div
@@ -35,11 +55,16 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
         `
       )}
     >
-      {options.useProxy ? (
-        <div>TK TODO: how to bust iframes?</div>
-      ) : (
-        <iframe title={options.title} src={options.src} className={styles.iframe} ></iframe>
-      )}
+      <iframe
+        title={options.title}
+        src={options.src}
+        className={cx(
+          styles.iframe,
+          css`
+            pointer-events: ${isResizing ? 'none' : 'auto'};
+          `
+        )}
+      ></iframe>
     </div>
   );
 };

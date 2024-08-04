@@ -16,9 +16,4 @@ export const plugin = new PanelPlugin<IframeOptions>(IframePanel).setPanelOption
       description: 'TKDescription of panel option',
       defaultValue: 'http://example.com',
     })
-    .addBooleanSwitch({
-      path:'useProxy',
-      name: 'Use Server Proxy',
-      description: 'Proxy requests through Grafana server for sites that don\'t support IFrames.',
-    })
 });
