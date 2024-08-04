@@ -1,6 +1,8 @@
 # IFrames for Grafana
 
-The IFrames panel is a simple plugin to use IFrames in Grafana dashboards without having to set the `DISABLE_SANITIZE_HTML` option. Using this plugin is more secure than disabling HTML sanitization, but still exposes you to the risks IFrames introduce, such as ClickJacking.
+The IFrames panel is a simple plugin to use IFrames in Grafana dashboards without having to set the `DISABLE_SANITIZE_HTML` option.
+
+Using this plugin is more secure than disabling HTML sanitization, but still exposes you to the risks IFrames introduce, such as ClickJacking.
 
 ## Requirements
 
