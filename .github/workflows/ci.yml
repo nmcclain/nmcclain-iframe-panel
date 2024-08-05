@@ -34,6 +34,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install docker-compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/2.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
       - name: Check types
         run: npm run typecheck
       - name: Lint
