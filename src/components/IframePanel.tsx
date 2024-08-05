@@ -27,7 +27,7 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
   const [isResizing, setIsResizing] = useState(false);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => { // avoids iframe interfering with resizing
+  useEffect(() => { // prevents iframe from interfering with resizing
     setIsResizing(true);
 
     if (resizeTimeoutRef.current) {
@@ -45,6 +45,16 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
     };
   }, [width, height]);
 
+  if (!options ||!options.src) {
+    return (
+      <div className={styles.wrapper}>
+        <div>
+          Please provide a source URL for the IFrame.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={cx(
@@ -56,12 +66,12 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
       )}
     >
       <iframe
-        title={options.title}
+        title='IFrame'
         src={options.src}
         className={cx(
           styles.iframe,
           css`
-            pointer-events: ${isResizing ? 'none' : 'auto'};
+            pointer-events: ${(isResizing || options.disableInteractivity) ? 'none' : 'auto'};
           `
         )}
       ></iframe>

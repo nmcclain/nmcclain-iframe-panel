@@ -1,39 +1,29 @@
 import { test, expect } from '@grafana/plugin-e2e';
 
-test('should display "No data" in case panel data is empty', async ({
-  gotoPanelEditPage,
-  readProvisionedDashboard,
+test('should display "Please provide a source URL" for a new panel', async ({
+  panelEditPage,
 }) => {
-  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
-  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '2' });
-  await expect(panelEditPage.panel.locator).toContainText('No data');
+  await panelEditPage.setVisualization('IFrame');
+  await expect(panelEditPage.panel.locator).toContainText('Please provide a source URL');
 });
 
-test('should display circle when data is passed to the panel', async ({
-  panelEditPage,
-  readProvisionedDataSource,
-  page,
+test('should have "Empty" panel with proper message', async ({
+  gotoDashboardPage,
+  dashboardPage,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
-  await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization('Iframe-Panel');
-  await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
+  await gotoDashboardPage({ uid: 'fdtfzttfbzv9ca' });
+  await expect(dashboardPage.getPanelByTitle('Empty').locator).toBeVisible();
+  await expect(dashboardPage.getPanelByTitle('Empty').locator).toContainText('Please provide a source URL');
 });
 
-test('should display series counter when "Show series counter" option is enabled', async ({
-  panelEditPage,
-  readProvisionedDataSource,
-  page,
-  selectors,
+test('should have "Robots" panel with proper content', async ({
+  gotoDashboardPage,
+  dashboardPage,
 }) => {
-  const ds = await readProvisionedDataSource({ fileName: 'datasources.yml' });
-  await panelEditPage.datasource.set(ds.name);
-  await panelEditPage.setVisualization('Iframe-Panel');
-  await panelEditPage.collapseSection('Iframe-Panel');
-  await expect(page.getByTestId('simple-panel-circle')).toBeVisible();
-  const showSeriesSwitch = panelEditPage
-    .getByGrafanaSelector(selectors.components.PanelEditor.OptionsPane.fieldLabel('Iframe-Panel Show series counter'))
-    .getByLabel('Toggle switch');
-  await showSeriesSwitch.click();
-  await expect(page.getByTestId('simple-panel-series-counter')).toBeVisible();
+  await gotoDashboardPage({ uid: 'fdtfzttfbzv9ca' });
+  const panel = dashboardPage.getPanelByTitle('Robots').locator;
+  await expect(panel).toBeVisible();
+
+  const iframe = panel.locator('iframe[title="IFrame"]');
+  await expect(iframe).toHaveAttribute('src', '/robots.txt');
 });

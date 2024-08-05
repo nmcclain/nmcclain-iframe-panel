@@ -10,10 +10,11 @@
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "npm run lint -- --fix",
     "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest --rootUrls http://localhost:3000/,https://grafana.dev/"
   },
-  "author": "Nmcclain",
+  "author": "Ned McClain",
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.21.4",

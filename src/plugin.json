@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "IFrame Panel",
+  "name": "IFrame",
   "id": "nmcclain-iframe-panel",
   "info": {
     "keywords": ["panel"],
