@@ -1,34 +1,26 @@
-# IFrames for Grafana
+# IFrame Panel for Grafana
 
-The IFrames panel is a simple plugin to use IFrames in Grafana dashboards without having to set the `DISABLE_SANITIZE_HTML` option.
+The IFrame panel is a simple plugin to use IFrames in Grafana dashboards without having to set the `DISABLE_SANITIZE_HTML` option.
 
-Using this plugin is more secure than disabling HTML sanitization, but still exposes you to the risks IFrames introduce, such as ClickJacking.
-
+Using this plugin is more secure than disabling HTML sanitization, but still exposes you to the inherent risks of IFrames, such as ClickJacking and Cross Frame Scripting.
 
 ## Requirements
 
-- **Grafana 10** or **Grafana 11**. TK
+- **Grafana 10** or **Grafana 11**.
 
 ## Getting Started
 
-You can install the IFrames panel from the [Grafana Plugins [catalog](https://grafana.com/grafana/plugins/nmcclain-iframe-panel/) or use the Grafana command line tool.
+This plugin is not yet available from the Grafana Labs plugin directory. You have two options to try it out:
 
-For the latter, please use the following command:
-
-```bash
-grafana-cli plugins install nmcclain-iframe-panel
-```
+1. The pre-release is signed for "localhost:3000" and works for local testing.
+2. You can test the plugin by setting app_mode: development, to allow un-signed plugins. This is not recommended in production.
 
 ## Highlights
 
-TK
-- Provides functionality to create customizable forms.
-- Supports custom code for initial and update requests.
-- Supports API requests, including the `GET` request to get initial values and the `DELETE`, `PATCH`, `POST`, and `PUT` requests to send values updated in the form.
-
-## Documentation
-
-TK
+- One required configuration option: URL to show in the IFrame panel.
+- Optionally scale/zoom IFrames as desired.
+- Optionally disable pointer-events on IFrames.
+- No Datasource is required/used.
 
 ## Feedback
 

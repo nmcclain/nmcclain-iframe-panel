@@ -10,6 +10,12 @@ export const plugin = new PanelPlugin<IframeOptions>(IframePanel).setPanelOption
       description: 'IFrame Source URL',
       defaultValue: '',
     })
+    .addNumberInput({
+      path:'scaleFactor',
+      name: 'Scale IFrame',
+      description: 'Zooms or shrinks the IFrame by this factor',
+      defaultValue: 1,
+    })
     .addBooleanSwitch({
       path:'disableInteractivity',
       name: 'Disable Interactivity',

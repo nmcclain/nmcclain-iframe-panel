@@ -9,15 +9,20 @@ interface Props extends PanelProps<IframeOptions> {}
 const getStyles = () => {
   return {
     wrapper: css`
-      font-family: Open Sans;
+      font-family: Open Sans, sans-serif;
+      overflow: hidden;
       position: relative;
     `,
     iframe: css`
       position: absolute;
+      overflow: hidden;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      frameborder: 0;
+      display: block;
+      transform-origin: 0 0;
+      allow: "accelerometer; encrypted-media;"
+      allowfullscreen;
     `,
   };
 };
@@ -55,6 +60,10 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
     );
   }
 
+   const scaleFactor = options.scaleFactor || 1;
+   const scaledWidth = width * (1 / scaleFactor);
+   const scaledHeight = height * (1 / scaleFactor);
+
   return (
     <div
       className={cx(
@@ -72,6 +81,9 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
           styles.iframe,
           css`
             pointer-events: ${(isResizing || options.disableInteractivity) ? 'none' : 'auto'};
+            width: ${scaledWidth}px;
+            height: ${scaledHeight}px;
+            transform: scale(${scaleFactor});
           `
         )}
       ></iframe>
