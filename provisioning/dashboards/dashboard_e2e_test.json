@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
   "links": [],
   "panels": [
     {
@@ -35,6 +34,7 @@
       "id": 5,
       "options": {
         "disableInteractivity": false,
+        "scaleFactor": 1,
         "src": "/robots.txt"
       },
       "title": "Robots",
@@ -53,16 +53,65 @@
       },
       "id": 6,
       "options": {
-        "disableInteractivity": false
+        "disableInteractivity": false,
+        "scaleFactor": 1,
+        "src": ""
       },
       "title": "Empty",
+      "type": "nmcclain-iframe-panel"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "disableInteractivity": false,
+        "scaleFactor": 1,
+        "src": "/robots.txt?env=${env}&dbid=$iframe_dbid"
+      },
+      "title": "Variables",
       "type": "nmcclain-iframe-panel"
     }
   ],
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "dev",
+          "value": "dev"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "env",
+        "options": [
+          {
+            "selected": true,
+            "text": "dev",
+            "value": "dev"
+          },
+          {
+            "selected": false,
+            "text": "prod",
+            "value": "prod"
+          }
+        ],
+        "query": "dev, prod",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",

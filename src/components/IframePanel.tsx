@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PanelProps } from '@grafana/data';
+import { locationService, getTemplateSrv } from '@grafana/runtime';
 import { IframeOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
@@ -21,18 +22,26 @@ const getStyles = () => {
       frameborder: 0;
       display: block;
       transform-origin: 0 0;
-      allow: "accelerometer; encrypted-media;"
-      allowfullscreen;
+      allow: 'accelerometer; encrypted-media;' allowfullscreen;
     `,
   };
 };
 
-export const IframePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
+const getDashboardID = (path: string): string => {
+  const parts = path.split('/');
+  if (parts.length >= 3) {
+    return parts[2]; // The dashboard id is at index 2 (/d/DASHID/dash-slug)
+  }
+  return '';
+};
+
+export const IframePanel: React.FC<Props> = ({ options, width, height, replaceVariables }) => {
   const styles = useStyles2(getStyles);
   const [isResizing, setIsResizing] = useState(false);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => { // prevents iframe from interfering with resizing
+  useEffect(() => {
+    // prevents iframe from interfering with resizing
     setIsResizing(true);
 
     if (resizeTimeoutRef.current) {
@@ -50,19 +59,25 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
     };
   }, [width, height]);
 
-  if (!options ||!options.src) {
+  if (!options || !options.src) {
     return (
       <div className={styles.wrapper}>
-        <div>
-          Please provide a source URL for the IFrame.
-        </div>
+        <div>Please provide a source URL for the IFrame.</div>
       </div>
     );
   }
 
-   const scaleFactor = options.scaleFactor || 1;
-   const scaledWidth = width * (1 / scaleFactor);
-   const scaledHeight = height * (1 / scaleFactor);
+  const scaleFactor = options.scaleFactor || 1;
+  const scaledWidth = width * (1 / scaleFactor);
+  const scaledHeight = height * (1 / scaleFactor);
+
+  // interpolate the dashboard variables on the src URL
+  let srcUrl = replaceVariables(options.src);
+
+  // interpolate the special $iframe_dbid template variable on the src URL
+  const dbID = getDashboardID(locationService.getLocation().pathname);
+  const ts = getTemplateSrv();
+  srcUrl = ts.replace(srcUrl, { iframe_dbid: { value: dbID } });
 
   return (
     <div
@@ -75,12 +90,12 @@ export const IframePanel: React.FC<Props> = ({ options, data, width, height, fie
       )}
     >
       <iframe
-        title='IFrame'
-        src={options.src}
+        title="IFrame"
+        src={srcUrl}
         className={cx(
           styles.iframe,
           css`
-            pointer-events: ${(isResizing || options.disableInteractivity) ? 'none' : 'auto'};
+            pointer-events: ${isResizing || options.disableInteractivity ? 'none' : 'auto'};
             width: ${scaledWidth}px;
             height: ${scaledHeight}px;
             transform: scale(${scaleFactor});

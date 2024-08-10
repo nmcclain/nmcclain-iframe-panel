@@ -22,3 +22,4 @@ services:
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: nmcclain-iframe-panel
+      GF_INSTALL_PLUGINS: marcusolsson-static-datasource

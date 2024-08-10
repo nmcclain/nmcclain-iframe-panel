@@ -20,6 +20,8 @@ This plugin is not yet available from the Grafana Labs plugin directory. You hav
 - One required configuration option: URL to show in the IFrame panel.
 - Optionally scale/zoom IFrames as desired.
 - Optionally disable pointer-events on IFrames.
+- Variables are supported for the IFrame Source URL.
+- Special variable "iframe_dbid" is available to populate Dashboard ID.
 - No Datasource is required/used.
 
 ## Feedback
